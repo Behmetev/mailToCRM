@@ -42,9 +42,27 @@ foreach ($folders as $folder) {
 
 	/** @var \Webklex\PHPIMAP\Message $message */
 	foreach ($messages as $message) {
+
+		if ($message->getFrom()[0]->mail == "vk_market@mikros.vrn.ru") {
+			//echo $message->getTextBody() . '<br />';
+			echo $message->getHTMLBody() . '<br />';
+		}
+
+		/*$attribute = $message->getAttributes();
+
+
+		foreach ($attribute as $key => $value) {
+			echo $key . " ";
+			echo $value . "\n";
+		}
+*/
 		//echo $message->getSubject() . '<br />';
+
+
+
+		break;
 		//echo 'Attachments: ' . $message->getAttachments()->count() . '<br />';
-		echo $message->getHTMLBody() . '<br />';
+		//echo $message->getHTMLBody() . '<br />';
 		/*
 		//Move the current Message to 'INBOX.read'
 		if ($message->move('INBOX.read') == true) {
