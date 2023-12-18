@@ -34,42 +34,38 @@ $folders = $client->getFolders();
 
 //Loop through every Mailbox
 /** @var \Webklex\PHPIMAP\Folder $folder */
-foreach ($folders as $folder) {
 
-	//Get all Messages of the current Mailbox $folder
-	/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-	$messages = $folder->messages()->all()->get();
-
-	/** @var \Webklex\PHPIMAP\Message $message */
-	foreach ($messages as $message) {
-
-		if ($message->getFrom()[0]->mail == "vk_market@mikros.vrn.ru") {
-			//echo $message->getTextBody() . '<br />';
-			echo $message->getHTMLBody() . '<br />';
-		}
-
-		/*$attribute = $message->getAttributes();
-
-
-		foreach ($attribute as $key => $value) {
-			echo $key . " ";
-			echo $value . "\n";
-		}
-*/
-		//echo $message->getSubject() . '<br />';
+//Get all Messages of the current Mailbox $folder
+/** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
+$messages = $folders[1]->messages()->all()->get();
+$today = date("Y-m-d");
+/** @var \Webklex\PHPIMAP\Message $message */
+foreach ($messages as $message) {
+	//$mailFrom = $message->getTo()[0]->mail;
+	//$mailDate = $message->getDate(); // 2023-11-01 15:37:18
+	$mailDate = date("Y-m-d", strtotime($message->getDate()));
+	if (strtotime($mailDate) == strtotime($today) && ($message->getFrom()[0]->mail == "ads.notifications@vk.company")) {
+		$textMail =  $message->getHTMLBody() . '\n';
+		$flags = $message->getFlags()/*->collect('seen')*/;
+		$textMail = explode("<br>", $textMail);
+		//print_r($flags["seen"]);
 
 
-
-		break;
-		//echo 'Attachments: ' . $message->getAttachments()->count() . '<br />';
-		//echo $message->getHTMLBody() . '<br />';
-		/*
-		//Move the current Message to 'INBOX.read'
-		if ($message->move('INBOX.read') == true) {
-			echo 'Message has ben moved';
+		if (isset($flags["seen"])) {
+			echo "isset";
 		} else {
-			echo 'Message could not be moved';
+			echo "no isset";
 		}
-		*/
+
+
+
+		//print_r($textMail);
+		//$message->setFlag('Seen');
 	}
+}
+
+
+function addB24(): string
+{
+	return "Лид добавлен";
 }
